@@ -4,7 +4,12 @@ import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#E53935',
+    secondary: '#1E88E5'
+  }
+})
 
 Vue.config.productionTip = false
 

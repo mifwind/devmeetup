@@ -5,7 +5,6 @@
         <v-list-tile 
           v-for="item in menuItems" 
           :key="item.title"
-          router
           :to="item.link"
         >
           <v-list-tile-action>
@@ -32,7 +31,6 @@
           flat 
           v-for="item in menuItems" 
           :key="item.title"
-          router
           :to="item.link"
         >
           <v-icon left>{{ item.icon }}</v-icon>
@@ -41,9 +39,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
