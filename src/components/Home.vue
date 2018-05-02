@@ -35,22 +35,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      meetups: [
-        {
-          imageUrl:
-            "http://7oom.ru/wp-content/uploads/piter/sankt_peterburg_foto_01.jpg",
-          id: "123",
-          title: "Meetup in St. Petersburg"
-        },
-        {
-          imageUrl: "https://www.votpusk.ru/country/ctimages/new/FR01.jpg",
-          id: "234",
-          title: "Meetup in Paris"
-        }
-      ]
-    };
+  computed: {
+		meetups () {
+			return this.$store.getters.featuredMeetups
+		}
 	},
 	methods: {
 		onLoadMeetup(id){
