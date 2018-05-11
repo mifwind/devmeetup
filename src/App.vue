@@ -49,15 +49,28 @@ export default {
   name: "App",
   data() {
     return {
-      sideNav: false,
-      menuItems: [
-        {icon: 'supervisor_account', title: 'View Meetups', link: '/meetups'},
-        {icon: 'room', title: 'Organize Meetup', link: '/meetups/new'},
-        {icon: 'person', title: 'Profile', link: '/profile'},
-        {icon: 'face', title: 'Sing up', link: '/singup'},
-        {icon: 'lock_open', title: 'Sing in', link: '/singin'}
-      ]
+      sideNav: false
     };
+  },
+  computed: {
+    menuItems () {
+      let menuItems = [
+        {icon: 'face', title: 'Sing up', link: '/signup'},
+        {icon: 'lock_open', title: 'Sing in', link: '/signin'}
+      ];
+      if (this.userIsAuth) {
+        menuItems = [
+          {icon: 'supervisor_account', title: 'View Meetups', link: '/meetups'},
+          {icon: 'room', title: 'Organize Meetup', link: '/meetup/new'},
+          {icon: 'person', title: 'Profile', link: '/profile'}
+        ];
+      }
+      return menuItems
+    },
+    userIsAuth(){
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+    }
+
   }
 };
 </script>
