@@ -6,16 +6,18 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import { store } from './store'
 import DateFilter from './filters/date'
+import AlertCmp from './components/Shared/Alert.vue'
 
 Vue.use(Vuetify, {
   theme: {
     primary: '#E53935',
     secondary: '#1E88E5'
   }
-})
-Vue.config.productionTip = false
+});
+Vue.config.productionTip = false;
 
-Vue.filter('date', DateFilter)
+Vue.filter('date', DateFilter);
+Vue.component('app-alert', AlertCmp);
 
 /* eslint-disable no-new */
 new Vue({
@@ -23,7 +25,7 @@ new Vue({
   router,
   store,
   render: h => h(App),
-  created (){
+  created() {
     firebase.initializeApp({
       apiKey: "AIzaSyAXcmTfsoH-Cdqkiem0svlt9R0M7eykkpI",
       authDomain: "meetups-1ced0.firebaseapp.com",
@@ -32,4 +34,4 @@ new Vue({
       storageBucket: "meetups-1ced0.appspot.com"
     })
   }
-})
+});

@@ -1,6 +1,11 @@
 <template>
 	<v-container>
 		<v-layout row>
+			<v-flex xs12 sm6 offset-sm3 v-if="error">
+				<app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+			</v-flex>
+		</v-layout>
+		<v-layout row>
 			<v-flex xs12 sm6 offset-sm3>
 				<v-card>
 					<v-card-text>
@@ -28,8 +33,13 @@
 									</v-flex>
 								</v-layout>
 								<v-layout row>
-									<v-flex xs12>
-										<v-btn type="submit">Sign in</v-btn>
+									<v-flex xs12 class="text-xs-center">
+										<v-btn 
+											type="submit"
+											:loading="loading"
+											:disabled="loading"
+											>
+											Sign in</v-btn>
 									</v-flex>
 								</v-layout>
 							</form>
@@ -43,29 +53,41 @@
 
 <script>
 export default {
-	data(){
-		return{
-			email: '',
-			password: ''
-		}
-	},
-	computed: {
-		user () {
-			return this.$store.getters.user
-		}
-	},
-	watch: {
-		user (value) {
-			if (value !==null && value !== undefined){
-				this.$router.push('/');
-			}
-		}
-	},
-	methods: {
-		onSignin(){
-			// Vuex
-			this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
-		}
-	}
-}
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.getters.user;
+    },
+    error() {
+      return this.$store.getters.error;
+    },
+    loading() {
+      return this.$store.getters.loading;
+    }
+  },
+  watch: {
+    user(value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push("/");
+      }
+    }
+  },
+  methods: {
+    onSignin() {
+      this.$store.dispatch("signUserIn", {
+        email: this.email,
+        password: this.password
+      });
+    },
+    onDismissed() {
+      console.log("Dismissed Alert!");
+      this.$store.dispatch("clearError");
+    }
+  }
+};
 </script>
