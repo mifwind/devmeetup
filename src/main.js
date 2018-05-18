@@ -32,6 +32,7 @@ new Vue({
       databaseURL: "https://meetups-1ced0.firebaseio.com",
       projectId: "meetups-1ced0",
       storageBucket: "meetups-1ced0.appspot.com"
-    })
+    });
+    this.$store.dispatch('loadMeetups');
   }
 });

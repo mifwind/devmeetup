@@ -6,28 +6,15 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
 	state: {
-		loadedMeetups: [
-			{
-				imageUrl:
-					"http://7oom.ru/wp-content/uploads/piter/sankt_peterburg_foto_01.jpg",
-				id: "dhfhg",
-				title: "Meetup in St. Petersburg",
-				location: 'St. Petersburg',
-				date: new Date('2018-01-01 12:05')
-			},
-			{
-				imageUrl: "https://www.votpusk.ru/country/ctimages/new/FR01.jpg",
-				id: "dfdfhfgg",
-				title: "Meetup in Paris",
-				location: 'Paris',
-				date: new Date('2017-12-02 23:43')
-			}
-		],
+		loadedMeetups: [],
 		user: null,
 		loading: false,
 		error: false
 	},
 	mutations: {
+		setLoadedMeetups(state, payload) {
+			state.loadedMeetups = payload;
+		},
 		createMeetup(state, payload) {
 			state.loadedMeetups.push(payload)
 		},
@@ -45,17 +32,49 @@ export const store = new Vuex.Store({
 		}
 	},
 	actions: {
+		loadMeetups({ commit }) {
+			commit('setLoading', true);
+			firebase.database().ref('meetups').once('value')
+				.then((data) => {
+					const meetups = [];
+					const obj = data.val();
+					for (let key in obj) {
+						meetups.push({
+							id: key,
+							imageUrl: obj[key].imageUrl,
+							title: obj[key].title,
+							location: obj[key].location,
+							description: obj[key].description,
+							date: obj[key].date
+						})
+					}
+					commit('setLoading', false);
+					commit('setLoadedMeetups', meetups);
+				})
+				.catch((error) => {
+					console.log(error);
+					commit('setLoading', false);
+				})
+		},
 		createMeetup({ commit }, payload) {
 			const meetup = {
 				title: payload.title,
 				location: payload.location,
 				imageUrl: payload.imageUrl,
 				description: payload.description,
-				date: payload.date,
-				id: Math.random().toString(36).substr(2, 9)
+				date: payload.date.toISOString()
 			}
-			//
-			commit('createMeetup', meetup)
+			firebase.database().ref('meetups').push(meetup)
+				.then((data) => {
+					console.log(data);
+					commit('createMeetup', {
+						...meetup,
+						id: data.key
+					});
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 		signUserUp({ commit }, payload) {
 			commit('setLoading', true);
@@ -101,7 +120,7 @@ export const store = new Vuex.Store({
 					}
 				)
 		},
-		clearError({ commit }){
+		clearError({ commit }) {
 			commit('clearError');
 		}
 	},
@@ -124,10 +143,10 @@ export const store = new Vuex.Store({
 		user(state) {
 			return state.user
 		},
-		loading (state) {
+		loading(state) {
 			return state.loading
 		},
-		error (state) {
+		error(state) {
 			return state.error
 		},
 	}
