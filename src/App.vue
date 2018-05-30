@@ -14,7 +14,17 @@
             {{ item.title }}
           </v-list-tile-content>
         </v-list-tile>
+
+        <v-list-tile v-if="userIsAuth" @click="onLogout">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            Logout
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
+
     </v-navigation-drawer>
     <v-toolbar app dark class="primary">
       <v-toolbar-side-icon 
@@ -27,6 +37,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
+
         <v-btn 
           flat 
           v-for="item in menuItems" 
@@ -36,6 +47,15 @@
           <v-icon left>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
+
+        <v-btn
+          flat
+          v-if="userIsAuth"
+          @click="onLogout">
+          <v-icon left>exit_to_app</v-icon>
+          Logout
+        </v-btn>
+
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
@@ -53,24 +73,35 @@ export default {
     };
   },
   computed: {
-    menuItems () {
+    menuItems() {
       let menuItems = [
-        {icon: 'face', title: 'Sing up', link: '/signup'},
-        {icon: 'lock_open', title: 'Sing in', link: '/signin'}
+        { icon: "face", title: "Sing up", link: "/signup" },
+        { icon: "lock_open", title: "Sing in", link: "/signin" }
       ];
       if (this.userIsAuth) {
         menuItems = [
-          {icon: 'supervisor_account', title: 'View Meetups', link: '/meetups'},
-          {icon: 'room', title: 'Organize Meetup', link: '/meetup/new'},
-          {icon: 'person', title: 'Profile', link: '/profile'}
+          {
+            icon: "supervisor_account",
+            title: "View Meetups",
+            link: "/meetups"
+          },
+          { icon: "room", title: "Organize Meetup", link: "/meetup/new" },
+          { icon: "person", title: "Profile", link: "/profile" }
         ];
       }
-      return menuItems
+      return menuItems;
     },
-    userIsAuth(){
-      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+    userIsAuth() {
+      return (
+        this.$store.getters.user !== null &&
+        this.$store.getters.user !== undefined
+      );
     }
-
+  },
+  methods: {
+    onLogout() {
+      this.$store.dispatch('logout')
+    }
   }
 };
 </script>
